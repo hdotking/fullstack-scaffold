@@ -49,6 +49,7 @@ frontend:
   result_component: RiskChart
 
 
+
 # ── MODE: resource ─────────────────────────────────────────────────────────────
 # Full CRUD REST API with SQLite/SQLAlchemy (swap to Postgres via one env var).
 # Use for: data management apps, admin dashboards, most real-world backends.
