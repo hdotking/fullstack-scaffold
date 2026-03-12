@@ -8,7 +8,12 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     debug: bool = False
     cors_origins: list[str] = ["http://localhost:5173"]
+<% if mode == "operation" %>
     model_version: str = "<<project.package>>-v1"
+<% elif mode == "resource" %>
+    # Swap to postgresql://user:pass@host/db for production
+    database_url: str = "sqlite:///./<<project.package>>.db"
+<% endif %>
 
 
 settings = Settings()

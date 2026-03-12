@@ -12,7 +12,11 @@ from <<project.package>>.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    # startup
+<% if mode == "resource" %>
+    # Create tables on startup in dev — use Alembic migrations in production
+    from <<project.package>>.database import Base, engine
+    Base.metadata.create_all(bind=engine)
+<% endif %>
     yield
     # shutdown
 

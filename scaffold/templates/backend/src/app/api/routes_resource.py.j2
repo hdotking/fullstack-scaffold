@@ -1,0 +1,58 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from <<project.package>>.api.schemas import (
+    <<resource.name>>Create,
+    <<resource.name>>Response,
+    <<resource.name>>Update,
+)
+from <<project.package>>.core import crud
+from <<project.package>>.database import get_db
+
+router = APIRouter(prefix="/api/v1/<<resource.name_plural>>", tags=["<<resource.name_plural>>"])
+
+
+@router.get("/", response_model=list[<<resource.name>>Response])
+def list_<<resource.name_plural>>(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+) -> list[<<resource.name>>Response]:
+    # TODO: return crud.list_<<resource.name_plural>>(db, skip=skip, limit=limit)
+    raise HTTPException(status_code=501, detail="Not implemented yet")
+
+
+@router.post("/", response_model=<<resource.name>>Response, status_code=201)
+def create_<<resource.name_lower>>(
+    payload: <<resource.name>>Create, db: Session = Depends(get_db)
+) -> <<resource.name>>Response:
+    # TODO: return crud.create_<<resource.name_lower>>(db, payload)
+    raise HTTPException(status_code=501, detail="Not implemented yet")
+
+
+@router.get("/{item_id}", response_model=<<resource.name>>Response)
+def get_<<resource.name_lower>>(
+    item_id: int, db: Session = Depends(get_db)
+) -> <<resource.name>>Response:
+    # TODO: item = crud.get_<<resource.name_lower>>(db, item_id)
+    # TODO: if not item: raise HTTPException(404, "Not found")
+    raise HTTPException(status_code=501, detail="Not implemented yet")
+
+
+@router.put("/{item_id}", response_model=<<resource.name>>Response)
+def update_<<resource.name_lower>>(
+    item_id: int, payload: <<resource.name>>Update, db: Session = Depends(get_db)
+) -> <<resource.name>>Response:
+    # TODO: return crud.update_<<resource.name_lower>>(db, item_id, payload)
+    raise HTTPException(status_code=501, detail="Not implemented yet")
+
+
+@router.delete("/{item_id}", status_code=204)
+def delete_<<resource.name_lower>>(
+    item_id: int, db: Session = Depends(get_db)
+) -> None:
+    # TODO: crud.delete_<<resource.name_lower>>(db, item_id)
+    raise HTTPException(status_code=501, detail="Not implemented yet")
+
+
+@router.get("/health", tags=["health"])
+def health() -> dict[str, str]:
+    return {"status": "ok", "service": "<<project.name>>"}

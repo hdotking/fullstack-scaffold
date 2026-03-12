@@ -1,0 +1,94 @@
+import { useEffect, useState } from 'react'
+import './index.css'
+import { <<frontend.list_component>> } from './components/<<frontend.list_component>>'
+import { <<frontend.form_component>> } from './components/<<frontend.form_component>>'
+import { <<frontend.detail_component>> } from './components/<<frontend.detail_component>>'
+import {
+  list<<resource.name>>s,
+  create<<resource.name>>,
+  delete<<resource.name>>,
+  type <<resource.name>>Create,
+  type <<resource.name>>Response,
+} from './api/client'
+
+function App() {
+  const [items, setItems] = useState<<<resource.name>>Response[]>([])
+  const [selected, setSelected] = useState<<<resource.name>>Response | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  async function load() {
+    setLoading(true)
+    try {
+      setItems(await list<<resource.name>>s())
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { load() }, [])
+
+  async function handleCreate(payload: <<resource.name>>Create) {
+    setError(null)
+    try {
+      await create<<resource.name>>(payload)
+      await load()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+    }
+  }
+
+  async function handleDelete(id: number) {
+    setError(null)
+    try {
+      await delete<<resource.name>>(id)
+      if (selected?.id === id) setSelected(null)
+      await load()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        <<project.description>>
+      </h1>
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-700">
+          {error}
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Create</h2>
+          <<<frontend.form_component>> onSubmit={handleCreate} loading={loading} />
+        </div>
+
+        <div>
+          <h2 className="text-xl font-semibold mb-4">
+            <<resource.name>>s {loading && <span className="text-gray-400 text-sm">loading…</span>}
+          </h2>
+          <<<frontend.list_component>>
+            items={items}
+            onSelect={setSelected}
+            onDelete={handleDelete}
+          />
+        </div>
+      </div>
+
+      {selected && (
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">Detail</h2>
+          <<<frontend.detail_component>> item={selected} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default App

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'cd \"$(git rev-parse --show-toplevel)\" && if [[ \"$CLAUDE_FILE_PATH\" == *.py ]]; then uv run ruff check --fix \"$CLAUDE_FILE_PATH\" 2>&1 && uv run mypy backend/src 2>&1; fi'"
+            "command": "bash -c 'ROOT=$(git rev-parse --show-toplevel); FILE=\"$CLAUDE_FILE_PATH\"; if [[ \"$FILE\" == *.py ]]; then cd \"$ROOT\" && uv run ruff check --fix \"$FILE\" 2>&1 && uv run mypy backend/src 2>&1; elif [[ \"$FILE\" == *.tsx || \"$FILE\" == *.ts ]] && [[ \"$FILE\" != *.gen.ts ]]; then cd \"$ROOT/frontend\" && npx tsc --noEmit 2>&1; fi'"
           },
           {
             "type": "command",

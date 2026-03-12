@@ -1,0 +1,13 @@
+from sqlalchemy import <<sa_types | join(", ")>>
+from sqlalchemy.orm import Mapped, mapped_column
+
+from <<project.package>>.database import Base
+
+
+class <<resource.name>>(Base):
+    __tablename__ = "<<resource.name_plural>>"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+<% for field in resource_fields %>
+    <<field.name>>: Mapped[<<field.type>>] = mapped_column(<<field.sa_type>><% if field.py_default is defined %>, default=<<field.py_default>><% endif %>)
+<% endfor %>

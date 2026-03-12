@@ -1,32 +1,61 @@
+# ── MODE: operation ────────────────────────────────────────────────────────────
+# Single POST endpoint, no database.
+# Use for: ML inference, scoring APIs, calculators, interview tasks.
+#
+# mode: operation
+#
+# project:
+#   name: creditcheck
+#   package: creditcheck
+#   description: "Credit scoring API for loan applications"
+#
+# domain:
+#   input_model: LoanApplication
+#   output_model: CreditDecision
+#   endpoint_path: assess         # → POST /api/v1/assess
+#   handler_name: assess_application
+#   business_logic_fn: assess
+#
+# input_fields:
+#   - { name: applicant_age,  type: int,   constraints: "ge=18, le=100" }
+#   - { name: annual_income,  type: float, constraints: "ge=0" }
+#   - { name: has_bankruptcy, type: bool }
+#   - { name: is_existing_customer, type: bool, default: false }
+#
+# output_fields:
+#   - { name: approved,      type: bool }
+#   - { name: risk_tier,     type: 'Literal["A", "B", "C", "D"]' }
+#   - { name: model_version, type: str }
+#
+# frontend:
+#   form_component: LoanForm
+#   result_component: DecisionSummary
+
+
+# ── MODE: resource ─────────────────────────────────────────────────────────────
+# Full CRUD REST API with SQLite/SQLAlchemy (swap to Postgres via one env var).
+# Use for: data management apps, admin dashboards, most real-world backends.
+
+mode: resource
+
 project:
-  name: myapp                          # repo/pyproject name (hyphens ok)
-  package: myapp                       # Python package name (underscores, no hyphens)
-  description: "My full-stack app"     # shown in docs + CLAUDE.md
+  name: myapp
+  package: myapp
+  description: "My full-stack app"
 
-domain:
-  input_model: ItemInput               # Pydantic input class name
-  output_model: ItemOutput             # Pydantic output class name
-  endpoint_path: predict               # POST /api/v1/{this} — no leading slash
-  handler_name: predict_item           # FastAPI route function name
-  business_logic_fn: predict           # function name in core/model.py
+resource:
+  name: Item                    # PascalCase singular — scaffold derives items, item_id etc.
+  # plural: items               # optional override (default: name.lower() + 's')
+  fields:
+    - { name: title,       type: str }
+    - { name: amount,      type: float, constraints: "ge=0" }
+    - { name: is_active,   type: bool,  default: true }
 
-# Each field: name, type, (optional) constraints, (optional) default
-# type: any Python annotation — int, float, str, bool, Literal["A","B"]
-# constraints: passed directly to Field(..., <constraints>)
-# default: makes field optional in input (adds = <default> in Python, ?: in TS)
-
-input_fields:
-  - { name: age,         type: int,   constraints: "ge=18, le=120" }
-  - { name: amount,      type: float, constraints: "ge=0" }
-  - { name: category,    type: str }
-  - { name: is_premium,  type: bool,  default: false }
-
-output_fields:
-  - { name: score,       type: float }
-  - { name: tier,        type: 'Literal["Bronze", "Silver", "Gold"]' }
-  - { name: approved,    type: bool }
-  - { name: model_version, type: str }
+database:
+  dev: sqlite                   # sqlite (default, zero-infra) | postgres
+  # docker: true                # uncomment → generates docker-compose.yml for postgres
 
 frontend:
-  form_component: ItemForm             # React component for the input form
-  result_component: ResultDisplay      # React component for showing output
+  list_component: ItemTable
+  form_component: ItemForm
+  detail_component: ItemDetail

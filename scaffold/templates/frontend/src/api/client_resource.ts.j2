@@ -1,0 +1,63 @@
+// Types below mirror the generated types.gen.ts
+
+export interface <<resource.name>>Create {
+<% for field in resource_fields %>
+<% if field.ts_optional %>
+  <<field.name>>?: <<field.ts_type>>
+<% else %>
+  <<field.name>>: <<field.ts_type>>
+<% endif %>
+<% endfor %>
+}
+
+export interface <<resource.name>>Update {
+<% for field in resource_fields %>
+  <<field.name>>?: <<field.ts_type>>
+<% endfor %>
+}
+
+export interface <<resource.name>>Response extends <<resource.name>>Create {
+  id: number
+}
+
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly detail: string,
+  ) {
+    super(`API error ${status}: ${detail}`)
+    this.name = 'ApiError'
+  }
+}
+
+const BASE = '/api/v1/<<resource.name_plural>>'
+
+async function request<T>(url: string, init?: RequestInit): Promise<T> {
+  let response: Response
+  try {
+    response = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...init })
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : 'Network error')
+  }
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({ detail: response.statusText }))
+    throw new ApiError(response.status, body.detail ?? response.statusText)
+  }
+  if (response.status === 204) return undefined as T
+  return response.json() as Promise<T>
+}
+
+export const list<<resource.name>>s = () =>
+  request<<<resource.name>>Response[]>(BASE)
+
+export const create<<resource.name>> = (payload: <<resource.name>>Create) =>
+  request<<<resource.name>>Response>(BASE, { method: 'POST', body: JSON.stringify(payload) })
+
+export const get<<resource.name>> = (id: number) =>
+  request<<<resource.name>>Response>(`${BASE}/${id}`)
+
+export const update<<resource.name>> = (id: number, payload: <<resource.name>>Update) =>
+  request<<<resource.name>>Response>(`${BASE}/${id}`, { method: 'PUT', body: JSON.stringify(payload) })
+
+export const delete<<resource.name>> = (id: number) =>
+  request<void>(`${BASE}/${id}`, { method: 'DELETE' })

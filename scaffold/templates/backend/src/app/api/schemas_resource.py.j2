@@ -1,0 +1,30 @@
+<% if needs_literal %>
+from typing import Literal
+
+<% endif %>
+from pydantic import BaseModel, Field
+
+
+class <<resource.name>>Create(BaseModel):
+<% for field in resource_fields %>
+<% if field.constraints is defined and field.constraints %>
+    <<field.name>>: <<field.type>> = Field(..., <<field.constraints>>)
+<% elif field.py_default is defined %>
+    <<field.name>>: <<field.type>> = <<field.py_default>>
+<% else %>
+    <<field.name>>: <<field.type>>
+<% endif %>
+<% endfor %>
+
+
+class <<resource.name>>Update(BaseModel):
+    """All fields optional — send only the fields you want to change."""
+<% for field in resource_fields %>
+    <<field.name>>: <<field.type>> | None = None
+<% endfor %>
+
+
+class <<resource.name>>Response(<<resource.name>>Create):
+    id: int
+
+    model_config = {"from_attributes": True}

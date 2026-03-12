@@ -1,0 +1,41 @@
+from sqlalchemy.orm import Session
+
+from <<project.package>>.api.schemas import (
+    <<resource.name>>Create,
+    <<resource.name>>Update,
+)
+from <<project.package>>.models import <<resource.name>>
+
+
+def list_<<resource.name_plural>>(
+    db: Session, skip: int = 0, limit: int = 100
+) -> list[<<resource.name>>]:
+    # TODO: return db.query(<<resource.name>>).offset(skip).limit(limit).all()
+    raise NotImplementedError
+
+
+def create_<<resource.name_lower>>(
+    db: Session, payload: <<resource.name>>Create
+) -> <<resource.name>>:
+    # TODO: db_item = <<resource.name>>(**payload.model_dump())
+    # TODO: db.add(db_item); db.commit(); db.refresh(db_item); return db_item
+    raise NotImplementedError
+
+
+def get_<<resource.name_lower>>(
+    db: Session, item_id: int
+) -> <<resource.name>> | None:
+    # TODO: return db.query(<<resource.name>>).filter(<<resource.name>>.id == item_id).first()
+    raise NotImplementedError
+
+
+def update_<<resource.name_lower>>(
+    db: Session, item_id: int, payload: <<resource.name>>Update
+) -> <<resource.name>>:
+    # TODO: fetch, apply payload.model_dump(exclude_unset=True), commit
+    raise NotImplementedError
+
+
+def delete_<<resource.name_lower>>(db: Session, item_id: int) -> None:
+    # TODO: fetch, db.delete(item), db.commit()
+    raise NotImplementedError
