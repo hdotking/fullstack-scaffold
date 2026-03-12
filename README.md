@@ -9,12 +9,40 @@ GitHub template repo → FastAPI + React + Tailwind + fully-wired contract pipel
 - **Contract**: openapi.json (committed) → openapi-typescript → types.gen.ts
 - **Hooks**: ruff+mypy on every Python edit, auto-regen on schemas.py edit, pytest on stop
 
+## Prerequisites
+
+These must be installed once on your machine. The scaffold itself handles everything else.
+
+```bash
+# uv — Python package manager (replaces pip + venv + pyenv)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Node + npm — pick one
+brew install node        # macOS
+# or: https://github.com/nvm-sh/nvm  (version manager, recommended)
+# or: https://volta.sh                (pinned versions per project)
+
+# gh — GitHub CLI (only needed for the template clone step)
+brew install gh
+gh auth login
+```
+
+> **Why uv and not pip?**
+> `uv run scaffold/generate.py` uses PEP 723 inline script metadata — it pulls
+> jinja2 + pyyaml into a temporary isolated environment and runs the script with
+> zero setup. No `uv init`, no manual venv activation needed. After generate.py
+> writes `pyproject.toml`, `uv sync` creates the project venv automatically.
+> All `make` targets use `uv run <cmd>` which finds the venv without activation.
+>
+> uv and npm are completely independent — they own `.venv/` and `node_modules/`
+> respectively and never interfere.
+
 ## Usage
 
 ### 1. Create a new project from this template
 
 ```bash
-gh repo create my-app --template yourusername/fullstack-scaffold --clone
+gh repo create my-app --template hdotking/fullstack-scaffold --clone
 cd my-app
 ```
 
