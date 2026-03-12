@@ -29,7 +29,7 @@ export class ApiError extends Error {
 
 export async function <<domain.handler_name>>(
   input: <<domain.input_model>>,
-): Promise<<<domain.output_model>>> {
+): Promise<<lt>><<domain.output_model>>> {
   let response: Response
   try {
     response = await fetch('/api/v1/<<domain.endpoint_path>>', {
@@ -46,5 +46,5 @@ export async function <<domain.handler_name>>(
     throw new ApiError(response.status, body.detail ?? response.statusText)
   }
 
-  return response.json() as Promise<<<domain.output_model>>>
+  return response.json() as Promise<<lt>><<domain.output_model>>>
 }

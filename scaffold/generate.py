@@ -125,6 +125,7 @@ def build_context_operation(cfg: dict[str, Any]) -> dict[str, Any]:
         "needs_literal": needs_literal,
         "input_field_names": ", ".join(f["name"] for f in input_fields),
         "output_field_names": ", ".join(f["name"] for f in output_fields),
+        "lt": "<",
     }
 
 
@@ -152,6 +153,7 @@ def build_context_resource(cfg: dict[str, Any]) -> dict[str, Any]:
         "database": db_cfg,
         "use_sqlite": db_cfg.get("dev", "sqlite") == "sqlite",
         "frontend": cfg["frontend"],
+        "lt": "<",
     }
 
 
@@ -287,11 +289,19 @@ def main() -> None:
         write(ROOT / out, render(env, tmpl, ctx))
 
     print("\n=== Frontend ===")
-    run("npm create vite@latest frontend -- --template react-ts --yes")
-    run("npm install tailwindcss recharts openapi-typescript", cwd=ROOT / "frontend")
-    run("npm install @tailwindcss/vite --legacy-peer-deps", cwd=ROOT / "frontend")
+    frontend_dir = ROOT / "frontend"
+    if not (frontend_dir / "package.json").exists():
+        # Pin to vite@7: compatible with @tailwindcss/vite@4, no auto-start prompt
+        run("npm create vite@7 frontend -- --template react-ts")
+    else:
+        print("  frontend/ already exists — skipping npm create vite")
     run(
-        "npm install -D vitest @vitest/ui jsdom "
+        "npm install --legacy-peer-deps "
+        "tailwindcss @tailwindcss/vite recharts openapi-typescript",
+        cwd=ROOT / "frontend",
+    )
+    run(
+        "npm install -D --legacy-peer-deps vitest @vitest/ui jsdom "
         "@testing-library/react @testing-library/user-event @testing-library/jest-dom",
         cwd=ROOT / "frontend",
     )

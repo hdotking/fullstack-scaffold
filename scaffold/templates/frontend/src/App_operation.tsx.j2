@@ -5,7 +5,7 @@ import { <<frontend.result_component>> } from './components/<<frontend.result_co
 import { <<domain.handler_name>>, type <<domain.input_model>>, type <<domain.output_model>> } from './api/client'
 
 function App() {
-  const [result, setResult] = useState<<<domain.output_model>> | null>(null)
+  const [result, setResult] = useState<<lt>><<domain.output_model>> | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -28,7 +28,7 @@ function App() {
         <<project.description>>
       </h1>
 
-      <<<frontend.form_component>> onSubmit={handleSubmit} loading={loading} />
+      <<lt>><<frontend.form_component>> onSubmit={handleSubmit} loading={loading} />
 
       {error && (
         <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded text-red-700">
@@ -36,7 +36,7 @@ function App() {
         </div>
       )}
 
-      {result && <<<frontend.result_component>> result={result} />}
+      {result && <<lt>><<frontend.result_component>> result={result} />}
     </div>
   )
 }

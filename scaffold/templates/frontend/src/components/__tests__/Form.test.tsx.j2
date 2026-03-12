@@ -4,12 +4,12 @@ import { <<frontend.form_component>> } from '../<<frontend.form_component>>'
 
 describe('<<frontend.form_component>>', () => {
   it('renders submit button', () => {
-    render(<<<frontend.form_component>> onSubmit={vi.fn()} loading={false} />)
+    render(<<lt>><<frontend.form_component>> onSubmit={vi.fn()} loading={false} />)
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument()
   })
 
   it('disables button when loading', () => {
-    render(<<<frontend.form_component>> onSubmit={vi.fn()} loading={true} />)
+    render(<<lt>><<frontend.form_component>> onSubmit={vi.fn()} loading={true} />)
     expect(screen.getByRole('button')).toBeDisabled()
   })
 })

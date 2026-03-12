@@ -48,16 +48,16 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export const list<<resource.name>>s = () =>
-  request<<<resource.name>>Response[]>(BASE)
+  request<<lt>><<resource.name>>Response[]>(BASE)
 
 export const create<<resource.name>> = (payload: <<resource.name>>Create) =>
-  request<<<resource.name>>Response>(BASE, { method: 'POST', body: JSON.stringify(payload) })
+  request<<lt>><<resource.name>>Response>(BASE, { method: 'POST', body: JSON.stringify(payload) })
 
 export const get<<resource.name>> = (id: number) =>
-  request<<<resource.name>>Response>(`${BASE}/${id}`)
+  request<<lt>><<resource.name>>Response>(`${BASE}/${id}`)
 
 export const update<<resource.name>> = (id: number, payload: <<resource.name>>Update) =>
-  request<<<resource.name>>Response>(`${BASE}/${id}`, { method: 'PUT', body: JSON.stringify(payload) })
+  request<<lt>><<resource.name>>Response>(`${BASE}/${id}`, { method: 'PUT', body: JSON.stringify(payload) })
 
 export const delete<<resource.name>> = (id: number) =>
   request<void>(`${BASE}/${id}`, { method: 'DELETE' })
