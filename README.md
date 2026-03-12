@@ -42,7 +42,7 @@ gh auth login
 ### 1. Create a new project from this template
 
 ```bash
-gh repo create my-app --template hdotking/fullstack-scaffold --clone
+gh repo create my-app --template hdotking/fullstack-scaffold --clone --public
 cd my-app
 ```
 
