@@ -1,0 +1,50 @@
+// Types below mirror the generated types.gen.ts — after `make types` you can
+// import from './types.gen' instead if you prefer the auto-generated names.
+
+export interface <<domain.input_model>> {
+<% for field in input_fields %>
+<% if field.ts_optional %>
+  <<field.name>>?: <<field.ts_type>>
+<% else %>
+  <<field.name>>: <<field.ts_type>>
+<% endif %>
+<% endfor %>
+}
+
+export interface <<domain.output_model>> {
+<% for field in output_fields %>
+  <<field.name>>: <<field.ts_type>>
+<% endfor %>
+}
+
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly detail: string,
+  ) {
+    super(`API error ${status}: ${detail}`)
+    this.name = 'ApiError'
+  }
+}
+
+export async function <<domain.handler_name>>(
+  input: <<domain.input_model>>,
+): Promise<<<domain.output_model>>> {
+  let response: Response
+  try {
+    response = await fetch('/api/v1/<<domain.endpoint_path>>', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    })
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : 'Network error')
+  }
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({ detail: response.statusText }))
+    throw new ApiError(response.status, body.detail ?? response.statusText)
+  }
+
+  return response.json() as Promise<<<domain.output_model>>>
+}

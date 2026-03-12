@@ -1,0 +1,44 @@
+import { useState } from 'react'
+import './index.css'
+import { <<frontend.form_component>> } from './components/<<frontend.form_component>>'
+import { <<frontend.result_component>> } from './components/<<frontend.result_component>>'
+import { <<domain.handler_name>>, type <<domain.input_model>>, type <<domain.output_model>> } from './api/client'
+
+function App() {
+  const [result, setResult] = useState<<<domain.output_model>> | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(input: <<domain.input_model>>) {
+    setError(null)
+    setLoading(true)
+    try {
+      const data = await <<domain.handler_name>>(input)
+      setResult(data)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        <<project.description>>
+      </h1>
+
+      <<<frontend.form_component>> onSubmit={handleSubmit} loading={loading} />
+
+      {error && (
+        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded text-red-700">
+          {error}
+        </div>
+      )}
+
+      {result && <<<frontend.result_component>> result={result} />}
+    </div>
+  )
+}
+
+export default App

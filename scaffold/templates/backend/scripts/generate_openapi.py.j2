@@ -1,0 +1,20 @@
+"""Generate openapi.json from the live FastAPI app schema.
+
+Run: uv run python backend/scripts/generate_openapi.py
+
+Committed as a contract artifact — CI diffs against it.
+Schema changes become explicit, reviewed acts.
+"""
+
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+from <<project.package>>.main import app  # noqa: E402
+
+output_path = Path(__file__).parent.parent.parent / "openapi.json"
+schema = app.openapi()
+output_path.write_text(json.dumps(schema, indent=2) + "\n")
+print(f"Written: {output_path}")

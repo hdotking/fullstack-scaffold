@@ -1,0 +1,17 @@
+import type { <<domain.output_model>> } from '../api/client'
+
+interface <<frontend.result_component>>Props {
+  result: <<domain.output_model>>
+}
+
+export function <<frontend.result_component>>({ result }: <<frontend.result_component>>Props) {
+  // TODO: implement result display using recharts or plain HTML
+  // Output fields: <<output_field_names>>
+  return (
+    <div className="mt-6 bg-white p-6 rounded shadow">
+      <pre className="text-sm text-gray-700 whitespace-pre-wrap">
+        {JSON.stringify(result, null, 2)}
+      </pre>
+    </div>
+  )
+}

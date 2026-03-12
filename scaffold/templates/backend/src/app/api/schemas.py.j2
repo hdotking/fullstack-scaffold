@@ -1,0 +1,23 @@
+<% if needs_literal %>
+from typing import Literal
+
+<% endif %>
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
+
+
+class <<domain.input_model>>(BaseModel):
+<% for field in input_fields %>
+<% if field.constraints is defined and field.constraints %>
+    <<field.name>>: <<field.type>> = Field(..., <<field.constraints>>)
+<% elif field.py_default is defined %>
+    <<field.name>>: <<field.type>> = <<field.py_default>>
+<% else %>
+    <<field.name>>: <<field.type>>
+<% endif %>
+<% endfor %>
+
+
+class <<domain.output_model>>(BaseModel):
+<% for field in output_fields %>
+    <<field.name>>: <<field.type>>
+<% endfor %>

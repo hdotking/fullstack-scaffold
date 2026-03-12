@@ -1,0 +1,57 @@
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from <<project.package>>.api.routes import router
+from <<project.package>>.config import settings
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    # startup
+    yield
+    # shutdown
+
+
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title=settings.app_name,
+        version=settings.app_version,
+        docs_url="/docs",
+        redoc_url="/redoc",
+        lifespan=lifespan,
+    )
+
+    # CORS — lock to frontend origin in production
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(router)
+
+    try:
+        app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
+    except RuntimeError:
+        pass  # frontend not built yet; fine in dev
+
+    return app
+
+
+app = create_app()
+
+
+def serve() -> None:
+    uvicorn.run(
+        "<<project.package>>.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+    )

@@ -1,0 +1,32 @@
+project:
+  name: myapp                          # repo/pyproject name (hyphens ok)
+  package: myapp                       # Python package name (underscores, no hyphens)
+  description: "My full-stack app"     # shown in docs + CLAUDE.md
+
+domain:
+  input_model: ItemInput               # Pydantic input class name
+  output_model: ItemOutput             # Pydantic output class name
+  endpoint_path: predict               # POST /api/v1/{this} — no leading slash
+  handler_name: predict_item           # FastAPI route function name
+  business_logic_fn: predict           # function name in core/model.py
+
+# Each field: name, type, (optional) constraints, (optional) default
+# type: any Python annotation — int, float, str, bool, Literal["A","B"]
+# constraints: passed directly to Field(..., <constraints>)
+# default: makes field optional in input (adds = <default> in Python, ?: in TS)
+
+input_fields:
+  - { name: age,         type: int,   constraints: "ge=18, le=120" }
+  - { name: amount,      type: float, constraints: "ge=0" }
+  - { name: category,    type: str }
+  - { name: is_premium,  type: bool,  default: false }
+
+output_fields:
+  - { name: score,       type: float }
+  - { name: tier,        type: 'Literal["Bronze", "Silver", "Gold"]' }
+  - { name: approved,    type: bool }
+  - { name: model_version, type: str }
+
+frontend:
+  form_component: ItemForm             # React component for the input form
+  result_component: ResultDisplay      # React component for showing output

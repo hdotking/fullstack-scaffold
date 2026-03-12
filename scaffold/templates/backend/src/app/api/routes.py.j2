@@ -1,0 +1,17 @@
+from fastapi import APIRouter, HTTPException
+
+from <<project.package>>.api.schemas import <<domain.input_model>>, <<domain.output_model>>
+
+router = APIRouter(prefix="/api/v1", tags=["<<project.name>>"])
+
+
+@router.post("/<<domain.endpoint_path>>", response_model=<<domain.output_model>>)
+def <<domain.handler_name>>(payload: <<domain.input_model>>) -> <<domain.output_model>>:
+    # sync def, not async def — CPU-bound work dispatched to threadpool by FastAPI
+    # TODO: implement — call model.<<domain.business_logic_fn>>(**payload.model_dump())
+    raise HTTPException(status_code=501, detail="Not implemented yet")
+
+
+@router.get("/health")
+def health() -> dict[str, str]:
+    return {"status": "ok", "service": "<<project.name>>"}

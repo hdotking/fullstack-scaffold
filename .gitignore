@@ -1,0 +1,21 @@
+# User fills this in locally — not committed to the template
+scaffold.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# Generated artifacts (exist only in generated projects, not the template)
+openapi.json
+frontend/src/api/types.gen.ts
+
+# Env
+.env

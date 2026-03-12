@@ -1,0 +1,36 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"$(git rev-parse --show-toplevel)\" && if [[ \"$CLAUDE_FILE_PATH\" == *.py ]]; then uv run ruff check --fix \"$CLAUDE_FILE_PATH\" 2>&1 && uv run mypy backend/src 2>&1; fi'"
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.claude/hooks/regen-types.sh\" \"$CLAUDE_TOOL_NAME\" \"$CLAUDE_FILE_PATH\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$(git rev-parse --show-toplevel)\" && uv run pytest -v --tb=short 2>&1 | tail -20"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(uv run *)",
+      "Bash(npm *)",
+      "Bash(npx *)"
+    ]
+  }
+}

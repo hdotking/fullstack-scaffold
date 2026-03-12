@@ -1,0 +1,22 @@
+.PHONY: backend frontend types test lint typecheck
+
+backend:
+	uv run serve
+
+frontend:
+	npm --prefix frontend run dev
+
+types:
+	uv run python backend/scripts/generate_openapi.py
+	npm --prefix frontend run generate:types
+
+test:
+	uv run pytest -v
+
+lint:
+	uv run ruff check backend/src backend/tests
+	uv run ruff format backend/src backend/tests
+
+typecheck:
+	uv run mypy backend/src
+	cd frontend && npx tsc --noEmit

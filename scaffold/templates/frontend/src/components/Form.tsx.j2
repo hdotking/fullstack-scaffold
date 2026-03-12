@@ -1,0 +1,29 @@
+import type { <<domain.input_model>> } from '../api/client'
+
+interface <<frontend.form_component>>Props {
+  onSubmit: (input: <<domain.input_model>>) => void
+  loading: boolean
+}
+
+export function <<frontend.form_component>>({ onSubmit, loading }: <<frontend.form_component>>Props) {
+  // TODO: implement form fields for <<domain.input_model>>
+  // Fields: <<input_field_names>>
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        // TODO: collect form values and call onSubmit(input)
+      }}
+      className="bg-white p-6 rounded shadow max-w-md"
+    >
+      <p className="text-gray-400 text-sm mb-4">Form fields — TODO</p>
+      <button
+        type="submit"
+        disabled={loading}
+        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+      >
+        {loading ? 'Processing…' : 'Submit'}
+      </button>
+    </form>
+  )
+}

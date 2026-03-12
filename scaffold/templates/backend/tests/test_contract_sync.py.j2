@@ -1,0 +1,26 @@
+"""Contract sync test: live app schema must match committed openapi.json.
+
+Fails if schemas.py is edited without regenerating openapi.json.
+Fix: run `make types`.
+"""
+
+import json
+from pathlib import Path
+
+from <<project.package>>.main import app
+
+OPENAPI_PATH = Path(__file__).parent.parent.parent / "openapi.json"
+
+
+def test_openapi_json_matches_live_schema() -> None:
+    if not OPENAPI_PATH.exists():
+        import pytest
+        pytest.skip("openapi.json not yet generated — run `make types`")
+
+    committed = json.loads(OPENAPI_PATH.read_text())
+    live = app.openapi()
+    assert committed == live, (
+        "openapi.json is stale. Run `make types`:\n"
+        "  uv run python backend/scripts/generate_openapi.py\n"
+        "  npm --prefix frontend run generate:types"
+    )
