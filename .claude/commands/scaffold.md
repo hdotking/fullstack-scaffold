@@ -15,6 +15,10 @@ Using the values from scaffold.yaml, write two files completely:
   Install: `npm install @tailwindcss/vite --legacy-peer-deps`
 - **Pydantic v2** — use `from pydantic import ValidationInfo` for field
   validators. Never use `pydantic_core.core_schema.FieldValidationInfo` (deprecated).
+- **recharts v3** — `Cell` is deprecated; add `fill` to each data object
+  instead of wrapping `<Bar>` children in `<Cell>`. `Tooltip formatter`
+  receives `ValueType | undefined` — guard with `Number(v ?? 0)`, not a bare
+  `number` cast.
 - **Inline comments** — keep ≤ 80 chars to stay under ruff's 88-char line limit.
 - **Working directory** — all `uv run` and `make` commands run from project root.
 - **Read before Write** — Edit/Write tools require the file to have been Read first.

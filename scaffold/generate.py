@@ -297,7 +297,7 @@ def main() -> None:
         print("  frontend/ already exists — skipping npm create vite")
     run(
         "npm install --legacy-peer-deps "
-        "tailwindcss @tailwindcss/vite recharts openapi-typescript",
+        "tailwindcss @tailwindcss/vite recharts react-is openapi-typescript",
         cwd=ROOT / "frontend",
     )
     run(
