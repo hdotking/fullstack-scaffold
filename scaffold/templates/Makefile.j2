@@ -1,4 +1,4 @@
-.PHONY: backend frontend types test lint typecheck<% if mode == "resource" %> db-init<% endif %>
+.PHONY: backend frontend types test lint typecheck scaffold-clean<% if mode == "resource" %> db-init<% endif %>
 
 backend:
 	uv run serve
@@ -22,6 +22,11 @@ lint:
 typecheck:
 	uv run mypy backend/src
 	cd frontend && npx tsc --noEmit
+
+scaffold-clean:
+	rm -rf backend frontend .venv openapi.json pyproject.toml Makefile CLAUDE.md plan.md
+	@echo "Kept: scaffold/ scaffold.yaml .claude/"
+	@echo "Re-run: uv run scaffold/generate.py"
 <% if mode == "resource" %>
 db-init:
 	uv run python -c "from <<project.package>>.database import Base, engine; Base.metadata.create_all(engine); print('tables created')"
