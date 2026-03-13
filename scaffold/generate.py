@@ -292,7 +292,7 @@ def main() -> None:
     frontend_dir = ROOT / "frontend"
     if not (frontend_dir / "package.json").exists():
         # Pin to vite@7: compatible with @tailwindcss/vite@4, no auto-start prompt
-        run("npm create vite@7 frontend -- --template react-ts")
+        run("npm create vite@7 frontend -- --template react-ts --yes")
     else:
         print("  frontend/ already exists — skipping npm create vite")
     run(
